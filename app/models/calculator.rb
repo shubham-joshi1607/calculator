@@ -6,11 +6,18 @@ class Calculator
         if numbers.start_with?("//")
           delimiter, numbers = numbers.split("\n", 2)
           delimiter = delimiter[2]
-          numbers.split(/#{Regexp.escape(delimiter)}|,|\n/).map(&:to_i).sum
+          parts = numbers.split(/#{Regexp.escape(delimiter)}|,|\n/)
         else
-          numbers.split(/,|\n/).map(&:to_i).sum
+          parts = numbers.split(/,|\n/)
         end
-    end
+      
+        ints = parts.map(&:to_i)
+        negatives = ints.select { |n| n < 0 }
+      
+        raise "negative numbers not allowed #{negatives.join(', ')}" if negatives.any?
+      
+        ints.sum
+    end      
       
 end
   
